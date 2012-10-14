@@ -1,0 +1,123 @@
+<html>
+<head>
+<title>JavaScript-Test</title>
+<script type="text/javascript" src="script.js"></script>
+</head>
+<body>
+<!--
+PIN2 <a onclick="http(2,1)"><button>HIGH</button></a>
+<a onclick="http(2,0)"><button>LOW</button></a><br />
+PIN3 <a onclick="http(3,1)"><button>HIGH</button></a>
+<a onclick="http(3,0)"><button>LOW</button></a><br />
+PIN4 <a onclick="http(4,1)"><button>HIGH</button></a>
+<a onclick="http(4,0)"><button>LOW</button></a><br />
+PIN5 <a onclick="http(5,1)"><button>HIGH</button></a>
+<a onclick="http(5,0)"><button>LOW</button></a><br />
+PIN6 <a onclick="http(6,1)"><button>HIGH</button></a>
+<a onclick="http(6,0)"><button>LOW</button></a><br />
+PIN7 <a onclick="http(7,1)"><button>HIGH</button></a>
+<a onclick="http(7,0)"><button>LOW</button></a><br />
+PIN8 <a onclick="http(8,1)"><button>HIGH</button></a>
+<a onclick="http(8,0)"><button>LOW</button></a><br />
+PIN9 <a onclick="http(9,1)"><button>HIGH</button></a>
+<a onclick="http(9,0)"><button>LOW</button></a><br />
+Alle <a onclick="allPins(1)"><button>HIGH</button></a>
+<a onclick="allPins(0)"><button>LOW</button></a><br />
+<br />
+-->
+<div id="iopins">
+	<table border="1">
+	<tr>
+		<td>Pin</td><td>on</td><td>off</td>
+	</tr>
+	<tr>
+		<td>2</td>
+		<td><input type="radio" name="pin2" value="on" onclick="http(2,1)"></td>
+		<td><input type="radio" name="pin2" value="off" checked="checked" onclick="http(2,0)"><br /></td>
+	</tr>
+	<tr>
+		<td>3</td>
+		<td><input type="radio" name="pin3" value="on" onclick="http(3,1)"></td>
+		<td><input type="radio" name="pin3" value="off" checked="checked" onclick="http(3,0)"><br /></td>
+	</tr>
+	<tr>
+		<td>4</td>
+		<td><input type="radio" name="pin4" value="on" onclick="http(4,1)"></td>
+		<td><input type="radio" name="pin4" value="off" checked="checked" onclick="http(4,0)"><br /></td>
+	</tr>
+	<tr>
+		<td>5</td>
+		<td><input type="radio" name="pin5" value="on" onclick="http(5,1)"></td>
+		<td><input type="radio" name="pin5" value="off" checked="checked" onclick="http(5,0)"><br /></td>
+	</tr>
+	<tr>
+		<td>6</td>
+		<td><input type="radio" name="pin6" value="on" onclick="http(6,1)"></td>
+		<td><input type="radio" name="pin6" value="off" checked="checked" onclick="http(6,0)"><br /></td>
+	</tr>
+	<tr>
+		<td>7</td>
+		<td><input type="radio" name="pin7" value="on" onclick="http(7,1)"></td>
+		<td><input type="radio" name="pin7" value="off" checked="checked" onclick="http(7,0)"><br /></td>
+	</tr>
+	<tr>
+		<td>8</td>
+		<td><input type="radio" name="pin8" value="on" onclick="http(8,1)"></td>
+		<td><input type="radio" name="pin8" value="off" checked="checked" onclick="http(8,0)"><br /></td>
+	</tr>
+	<tr>
+		<td>9</td>
+		<td><input type="radio" name="pin9" value="on" onclick="http(9,1)"></td>
+		<td><input type="radio" name="pin9" value="off" checked="checked" onclick="http(9,0)"><br /></td>
+	</tr>
+	<tr>
+		<td>all</td>
+		<td><input type="radio" name="allpins" value="on" onclick="allPins(1)"></td>
+		<td><input type="radio" name="allpins" value="off" checked="checked" onclick="allPins(0)"><br /></td>
+	</tr>
+	</table>
+</div>
+
+<br/>
+<a onclick="analogRead()"><button>Update analog-values</button></a>
+<div id="iopins">
+	<table border="1">
+	<tr>
+		<td>ADC-Port</td><td>INTEGER</td><td>VOLTAGE</td>
+	</tr>
+	<tr>
+		<td>0</td>
+		<td id="adc0_int"></td>
+		<td id="adc0_volt"></td>
+	</tr>
+	<tr>
+		<td>1</td>
+		<td id="adc1_int"></td>
+		<td id="adc1_volt"></td>
+	</tr>
+	<tr>
+		<td>2</td>
+		<td id="adc2_int"></td>
+		<td id="adc2_volt"></td>
+	</tr>
+	<tr>
+		<td>3</td>
+		<td id="adc3_int"></td>
+		<td id="adc3_volt"></td>
+	</tr>
+	<tr>
+		<td>4</td>
+		<td id="adc4_int"></td>
+		<td id="adc4_volt"></td>
+	</tr>
+	<tr>
+		<td>5</td>
+		<td id="adc5_int"></td>
+		<td id="adc5_volt"></td>
+	</tr>
+<br />
+<!--button id="link" onclick="getHttpRequest()">Starte HttpRequest</button -->
+<div id="ergebnis">Ergebnis:</div>
+	   
+</body>
+</html>
