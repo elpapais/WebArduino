@@ -1,18 +1,20 @@
 /*
-  WebArduino
+  Web Server
  
- A simple web server to manipulate the OUT-Pins by using a webbrowser. Also
- it's possible to read the adc-values
+ A simple web server to set or reset the arduino-ports 2-9
+ and to watch the adc-ports.
+ using an Arduino Wiznet Ethernet shield. 
  
  Circuit:
  * Ethernet shield attached to pins 10, 11, 12, 13
  * Analog inputs attached to pins A0 through A5 (optional)
  
- based on the werserver-example of the arduino-GUI
+ based on the webserver-example from the arduino-gui
  
+ Codes by K. Blauel
+ Last modified 19 Oct. 2012
  
- modified 18 Oct 2012
- coded by K. Blauel
+ Licence: GPL 3.0 or later
  
  */
 
@@ -30,7 +32,7 @@ IPAddress ip(192,168,1, 177);
 // (port 80 is default for HTTP):
 EthernetServer server(80);
 
-String scanner = "";      // stores the first 1000 bytes of the client-request
+String scanner = "***\n";      // stores the first 1000 bytes of the client-request
 
 void setup() {
   
@@ -38,7 +40,7 @@ void setup() {
     pinMode(i, OUTPUT);
     
  // Open serial communications and wait for port to open:
-  Serial.begin(38400);
+  Serial.begin(38400); //! Chance it if you need
    while (!Serial) {
     ; // wait for serial port to connect. Needed for Leonardo only
   }
@@ -56,7 +58,7 @@ void loop() {
   // listen for incoming clients
   EthernetClient client = server.available();
   if (client) {
-    Serial.println("new client");
+    Serial.println("\nnew client\n");
     // an http request ends with a blank line
     boolean currentLineIsBlank = true;
     while (client.connected()) {
@@ -69,17 +71,29 @@ void loop() {
         // if you've gotten to the end of the line (received a newline character) and the line is blank, the http request has ended, so you can send a reply
         if (c == '\n' && currentLineIsBlank) {
           
+          scanner += "***";
+          
           controller(scanner);
           // send a standard http response header
           client.println("HTTP/1.1 200 OK");
           client.println("Content-Type: text/html");
           client.println("Connnection: close");
           client.println();
-          client.println("<!DOCTYPE HTML>");
-          client.println("<html>");
+          client.println("<?xml version=\"1.0\"?>");
+          client.println("<root>");
                     // add a meta refresh tag, so the browser pulls again every 5 seconds:
           // client.println("<meta http-equiv=\"refresh\" content=\"5\">");
           // output the value of each analog input pin
+          
+          for (int digitalChannel = 2; digitalChannel <= 9; digitalChannel++) {
+            int sensorReading = digitalRead(digitalChannel);
+            client.print("\t<data name=\"dout_");
+            client.print(digitalChannel);
+            client.print("\">");
+            client.print(sensorReading);
+            client.println("</data>");       
+          }
+          
           for (int analogChannel = 0; analogChannel < 6; analogChannel++) {
             int sensorReading = analogRead(analogChannel);
             client.print("\t<data name=\"adc_");
@@ -88,7 +102,7 @@ void loop() {
             client.print(sensorReading);
             client.println("</data>");       
           }
-          client.println("</html>");
+          client.println("</root>");
           break;
         }
         if (c == '\n') {
@@ -106,10 +120,9 @@ void loop() {
     // close the connection:
     client.stop();
    
-    Serial.print(scanner);
-    Serial.print("\n"); 
-    //controller(scanner);
-    Serial.print("client disonnected\n");
+    //Serial.print(scanner);
+    //Serial.print("\n"); 
+    Serial.print("\nclient disconnected\n");
      
     
     scanner = "";
@@ -118,137 +131,38 @@ void loop() {
 
 void controller(String string)
 {
-  String parameters = getParameters(string, "?param=", " ");
   
-  if(parameters.indexOf("digitalWrite(") >= 0)
-    doDigitalWrite(parameters);
-    
-  if(parameters.indexOf("analogRead(") >= 0)
-    Serial.println("analogRead: "+doAnalogRead(parameters));
-    
-}
-
-String getParameters(String string, String paramName, String endParam)
-{
-  int startsAt = string.indexOf(paramName);
-  int endsAt;
-  
-  String retV = "null";
-  
-  //Serial.println("2. getParameters->string="+string);
-  
-  if(startsAt >=0)
+  if(string.indexOf("ardcmd:dw:") >= 0)
   {
-    endsAt = string.indexOf(endParam, startsAt) + 1;
+    String search = "ardcmd:dw:";
+    int startsAt = string.indexOf(search);
+    int endsAt = string.indexOf(";", startsAt+1);
+    int pin, pinState;
+    char part[10];
+    String part1, part2;
     
-     // msg1(startsAt, endsAt);
-     
-    if(endsAt >=0)
-      retV = string.substring(startsAt, endsAt);
-    else
-      retV = "";
-  }
- 
-  return retV;
-}
-
-int *getParameterValues(String string, String paramName)
-{
-  
-  //Serial.print("3. getParameterValues->string_"+string);
-  //Serial.print("_ paramName->"+paramName);
-  int* pointer;
-  int startsAt = string.indexOf(paramName) + paramName.length();
-  int endsAt;
-  int kommaAt;
-  int pin=-1;
-  int pinState=-1;
-  
-  String ret;
-
-  int values[2]; //  = matchParameters(string); 
-  
-  pointer = values;
-  
-  if(startsAt >=0)
-  {
-    endsAt = string.indexOf(")", startsAt);
-
-    if(endsAt >=0)
-    {
-      kommaAt = string.indexOf(",");
-           
-      char part[10];
-     
-      // match the selected pin
-      string.substring(startsAt, kommaAt).toCharArray(part,10);
-      pin = atoi(part);
+    part1 = string.substring(startsAt+search.length(), startsAt+search.length()+1);
+    part2 = string.substring(startsAt+search.length()+2, endsAt);
+    
+    /*Serial.print("\nardcmd:dw: vorhanden\n");
+    
+    Serial.print(startsAt); Serial.print("\n"); Serial.print(endsAt);
+    
+    Serial.print("\n1. Wert:"); Serial.print(part1); Serial.print(":1. Wert");
+    
+    Serial.print("\n2. Wert:"); Serial.print(part2); Serial.print(":2. Wert\n");
+    */
+     // match the selected pin
+     part1.toCharArray(part,10);
+     pin = atoi(part);
       
       // match the selected pinState
-      string.substring(kommaAt+1, endsAt).toCharArray(part,10);
-      pinState = atoi(part);
-      
+     part2.toCharArray(part,10);
+     pinState = atoi(part);
+     
      //pin = values[0];
      //pinState = values[1];
      
-     values[0] = pin;
-     values[1] = pinState;
-    }
+     digitalWrite(pin, pinState);
   }
-  
-  return pointer;
 }
-
-String doDigitalWrite(String string)
-{
-  //Serial.println("1. digitalWrite: "+string);  // "digitalWrite("
-  
-  int *pinData;
-  
-  String retV = "null";
-  String parameters = getParameters(string, "digitalWrite(", ")");
-
-  //Serial.print("\n2. digitalWrite: "+parameters); Serial.print(parameters);
-  
-  pinData = getParameterValues(parameters, "digitalWrite(");
-  
-  if(pinData[0] >=0 && pinData[1] >= 0)
-    digitalWrite((int)pinData[0], (int)pinData[1]);
-    //digitalWrite(2, 1);
-    
-  /*Serial.print("\npin=");
-  Serial.print(pinData[0]);
-  Serial.print("\npinState=");
-  Serial.print(pinData[1]);
-  
-*/
-  
-}
-
-String doAnalogRead(String string)
-{
-  String retV = "null";
-  
-  
-}
-
-/*void msg1(int startsAt, int endsAt)
-{
-    Serial.print("\nstartsAt=");
-    Serial.print(startsAt);
-    Serial.print("\nendsAt=");
-    Serial.print(endsAt);
-   // Serial.print("\,kommaAt=");
-   // Serial.println(kommaAt);
- }
-
-void msg2(int pin, int pinState)
-{
-  Serial.print("\npin = ");
-  Serial.print(pin);
-  Serial.print("\npinState = ");
-  Serial.print(pinState);
-  Serial.println("");
-  
-
-}*/

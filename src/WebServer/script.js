@@ -31,7 +31,7 @@ function http(pin, state) {
 	//alert("digitalWrite("+pin+","+state+")");
 	if (xmlHttp)
 	{
-		xmlHttp.open('GET', 'http://192.168.1.177/?param=digitalWrite('+pin+','+state+')', true);
+		xmlHttp.open('GET', 'http://192.168.1.177/ardcmd:dw:'+pin+':'+state+';', true);
 		//xmlHttp.open('GET', 'http://192.168.2.177/?param=digitalWrite(2,1)', true);
 		xmlHttp.onreadystatechange = function ()
 		{
