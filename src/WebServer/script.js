@@ -1,4 +1,4 @@
-var ipAdress = "192.168.2.177";
+var ipAdress = "192.168.1.177";
 
 function xmlHttpObject()
 {
@@ -26,12 +26,12 @@ function xmlHttpObject()
 
 function http(pin, state) {
 	var xmlHttp = xmlHttpObject();
-	var ipAdress = "192.168.2.177";
+	var ipAdress = "192.168.1.177";
 	
 	//alert("digitalWrite("+pin+","+state+")");
 	if (xmlHttp)
 	{
-		xmlHttp.open('GET', 'http://192.168.2.177/?param=digitalWrite('+pin+','+state+')', true);
+		xmlHttp.open('GET', 'http://192.168.1.177/?param=digitalWrite('+pin+','+state+')', true);
 		//xmlHttp.open('GET', 'http://192.168.2.177/?param=digitalWrite(2,1)', true);
 		xmlHttp.onreadystatechange = function ()
 		{
@@ -48,10 +48,10 @@ function analogRead()
 {
 	var xmlHttp = xmlHttpObject();
 	var xmlResponse, data, root, parser, myResult;
-	var ipAdress = "192.168.2.177";
+	var ipAdress = "192.168.1.177";
 	
 	if (xmlHttp) {
-		xmlHttp.open('GET', 'http://192.168.2.177/?param=getADC()', true);
+		xmlHttp.open('GET', 'http://192.168.1.177/?param=getADC()', true);
 		xmlHttp.onreadystatechange = function ()
 		{
 			if (xmlHttp.readyState == 4) {
