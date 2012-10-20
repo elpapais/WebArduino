@@ -37,6 +37,7 @@ function http(pin, state) {
 		{
 			if (xmlHttp.readyState == 4) {
 				document.getElementById("ergebnis").innerHTML = "Status von Pin " +pin+" auf " + ((state==1) ? "HIGH" : "LOW") + " setzen";
+				//alert("Antwort:\n"+xmlHttp.responseText);
 			}
 		};
 		
@@ -51,19 +52,19 @@ function analogRead()
 	var ipAdress = "192.168.1.177";
 	
 	if (xmlHttp) {
-		xmlHttp.open('GET', 'http://192.168.1.177/?param=getADC()', true);
+		xmlHttp.open('GET', 'http://192.168.1.177/ardcmd:adc;', true);
 		xmlHttp.onreadystatechange = function ()
 		{
 			if (xmlHttp.readyState == 4) {
-				xmlResponse = xmlHttp.responseText;
-				alert(""+xmlResponse);
-				//parser=new DOMParser();
-				//xmlDoc=parser.parseFromString(xmlResponse,"text/xml");
-				//data = xml.getElementsByTagName("data");
+				xmlResponse = xmlHttp.responseXML; //Text;
+				//alert(""+xmlResponse);
+				parser=new DOMParser();
+				xmlDoc=parser.parseFromString(xmlResponse, "text/xml");
+				data = xmlResponse.getElementsByName("adc_0")[0];
 				//myResult = xmlDoc.getElementsByTagName("root")[0];//.getElementById("adc0"); //.firstChild.nodeValue;
 				//data = myResult.getElementByName("adc0"); //("data")[0].nodeValue; //.getElementById("adc0");
 				//xmlResponseTest = xmlResponse.getElementByTagName("data")[0];				//document.getElementById("ergebnis").innerHTML = "Status von Pin " +pin+" auf " + ((state==1) ? "HIGH" : "LOW") + " setzen";
-				//alert(""+data); //xmlHttp.responseText);
+				alert(""+data); //xmlHttp.responseText);
 				
 				//document.getElementById("adc0_int").innerHTML = "test: "+xmlResponseTest;
 			}
@@ -90,4 +91,59 @@ function allPins(state) {
 			document.getElementsByName("pin"+i)[1].checked = true;
 		}	
 	}
+}
+
+function switchButton(obj)
+{
+	var object = document.getElementById(obj);
+	var i, n, pin;
+	var splitStr = obj.split("_");
+	
+	if(splitStr[1] == "all")
+	{
+		n = 9;
+		i = 2;
+		
+		if(document.getElementById(splitStr[0]+"_all").innerHTML == "OFF")
+		{
+			document.getElementById(splitStr[0]+"_all").innerHTML = "ON";
+			document.getElementById(splitStr[0]+"_all").style.color = "green";
+			//document.getElementById(splitStr[0]+"_all_button").color = "green";
+		}
+		else
+		{
+			document.getElementById(splitStr[0]+"_all").innerHTML = "OFF";
+			document.getElementById(splitStr[0]+"_all").style.color = "red";
+			//document.getElementById(splitStr[0]+"_all_button").color = "red";
+		}
+	}
+	else
+	{
+		n = parseInt(splitStr[1]);
+		i = n;	
+	}	
+	
+	// alert(obj+":"+object.innerHTML);
+	
+	for(; i<=n; i++)
+	{
+		if(document.getElementById(splitStr[0]+"_"+i).innerHTML == "OFF")
+		{
+			document.getElementById(splitStr[0]+"_"+i).innerHTML = "ON";
+			document.getElementById(splitStr[0]+"_"+i).style.color = "green";
+			//document.getElementById(splitStr[0]+"_"+i+"_button").color = "green";
+			
+			http(i, 1);
+		}
+		else
+		{
+			document.getElementById(splitStr[0]+"_"+i).innerHTML = "OFF";
+			document.getElementById(splitStr[0]+"_"+i).style.color = "red";
+			//document.getElementById(splitStr[0]+"_"+i+"_button").color = "red";
+			
+			http(i, 0);
+		}
+	}
+	
+	return true;
 }

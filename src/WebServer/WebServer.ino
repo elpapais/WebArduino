@@ -1,5 +1,5 @@
 /*
-  Web Server
+  WebArduino
  
  A simple web server to set or reset the arduino-ports 2-9
  and to watch the adc-ports.
@@ -164,5 +164,10 @@ void controller(String string)
      //pinState = values[1];
      
      digitalWrite(pin, pinState);
+  }
+  
+  if(string.indexOf("ardcmd:adc:") >= 0)
+  {
+    
   }
 }
