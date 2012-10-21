@@ -14,7 +14,7 @@
 	</div>
 	
 	<br/>
-	<div id="pinarea" style="margin-left: auto; margin-right: auto; width: 90%; height: 175px; background: gray;">
+	<div id="pinarea" style="margin-left: auto; margin-right: auto; width: 90%; height: 175px; background: gray;" class="roundBorder">
 		<div style="text-align: center; padding-top:5px">
 			<a onclick="switchButton('pin_2')"><button class="pinbutton" id="pin_2_button">Pin 2 <div class="buttontext" id="pin_2">OFF</div></button></a>
 			<a onclick="switchButton('pin_3')"><button class="pinbutton" id="pin_3_button">Pin 3 <div class="buttontext" id="pin_3">OFF</div></button></a>
@@ -31,10 +31,10 @@
 	<br/>
 	<br/>
 	<div style="margin-left: auto; margin-right: auto; width: 90%">
-		<div style="text-align: center"><button onclick="analogRead()" style="width: 100%; height: 35px; font-size: large">Update analog-values</button><div>
+		<div style="text-align: center"><button onclick="analogRead()" style="width: 100%; height: 35px; font-size: large" class="roundBorder">Update analog-values</button><div>
 		<br/>
-		<div id="adc_table" style="">
-			<table border="0" style="width: 100%; border-collapse:collapse; text-align: center; border-style: solid; border-width: 1px; border-color: lightgray; color: white">
+		<div id="adc_table"  style="background: gray;" class="roundBorder">
+			<table border="0" style="margin-left: auto; margin-right: auto; width: 100%; border-collapse:collapse; text-align: center; border-color: lightgray; color: white">
 			<tr>
 				<th>ADC-Port</th><th>INTEGER</th><th>VOLTAGE</th>
 			</tr>
