@@ -4,34 +4,34 @@
 <link rel="stylesheet" type="text/css" href="style.css">
 <script type="text/javascript" src="script.js"></script>
 </head>
-<body>
+<body onload="analogRead()">
 
 <div id="iopins" style="width: 320px; height: 480px; border-style: solid; border-width: 1px; background: black">
 
-	<div style="text-align: center; background: gray; color: white">
-	WebArduino: Switch pins and read adc-values
-	</div>
-
-	<div style="text-align: center; padding-top:5px">
-		<a onclick="switchButton('pin_2')"><button id="pin_2_button" style="width: 60px">Pin 2 <div style="font-weight: bold; color: red" id="pin_2">OFF</div></button></a>
-		<a onclick="switchButton('pin_3')"><button id="pin_3_button" style="width: 60px">Pin 3 <div style="font-weight: bold; color: red" id="pin_3">OFF</div></button></a>
-		<a onclick="switchButton('pin_4')"><button id="pin_4_button" style="width: 60px">Pin 4 <div style="font-weight: bold; color: red" id="pin_4">OFF</div></button></a><br />
-		<a onclick="switchButton('pin_5')"><button id="pin_5_button" style="width: 60px">Pin 5 <div style="font-weight: bold; color: red" id="pin_5">OFF</div></button></a>
-		<a onclick="switchButton('pin_6')"><button id="pin_6_button" style="width: 60px">Pin 6 <div style="font-weight: bold; color: red" id="pin_6">OFF</div></button></a>
-		<a onclick="switchButton('pin_7')"><button id="pin_7_button" style="width: 60px">Pin 7 <div style="font-weight: bold; color: red" id="pin_7">OFF</div></button></a><br />
-		<a onclick="switchButton('pin_8')"><button id="pin_8_button" style="width: 60px">Pin 8 <div style="font-weight: bold; color: red" id="pin_8">OFF</div></button></a>
-		<a onclick="switchButton('pin_9')"><button id="pin_8_button" style="width: 60px">Pin 9 <div style="font-weight: bold; color: red" id="pin_9">OFF</div></button></a>
-		<a onclick="switchButton('pin_all')"><button id="pin_all_button" style="width: 60px">&nbsp;ALL&nbsp;<div style="font-weight: bold; color: red" id="pin_all">OFF</div></button></a>
+	<div class="headline">
+		<div class="headlinetext">WebArduino: Switch pins and read adc-values</div>
 	</div>
 	
 	<br/>
+	<div style="text-align: center; padding-top:5px">
+		<a onclick="switchButton('pin_2')"><button class="pinbutton" id="pin_2_button">Pin 2 <div class="buttontext" id="pin_2">OFF</div></button></a>
+		<a onclick="switchButton('pin_3')"><button class="pinbutton" id="pin_3_button">Pin 3 <div class="buttontext" id="pin_3">OFF</div></button></a>
+		<a onclick="switchButton('pin_4')"><button class="pinbutton" id="pin_4_button">Pin 4 <div class="buttontext" id="pin_4">OFF</div></button></a><br />
+		<a onclick="switchButton('pin_5')"><button class="pinbutton" id="pin_5_button">Pin 5 <div class="buttontext" id="pin_5">OFF</div></button></a>
+		<a onclick="switchButton('pin_6')"><button class="pinbutton" id="pin_6_button">Pin 6 <div class="buttontext" id="pin_6">OFF</div></button></a>
+		<a onclick="switchButton('pin_7')"><button class="pinbutton" id="pin_7_button">Pin 7 <div class="buttontext" id="pin_7">OFF</div></button></a><br />
+		<a onclick="switchButton('pin_8')"><button class="pinbutton" id="pin_8_button">Pin 8 <div class="buttontext" id="pin_8">OFF</div></button></a>
+		<a onclick="switchButton('pin_9')"><button class="pinbutton" id="pin_8_button">Pin 9 <div class="buttontext" id="pin_9">OFF</div></button></a>
+		<a onclick="switchButton('pin_all')"><button class="pinbutton" id="pin_all_button">&nbsp;ALL&nbsp;<div class="buttontext" id="pin_all">OFF</div></button></a>
+	</div>
+	
 	<br/>
-	<div style="text-align: center"><button onclick="analogRead()" class="">Update analog-values</button><div>
+	<div style="text-align: center;"><button onclick="analogRead()" style=" font-size: large">Update analog-values</button><div>
 	<br/>
-	<div id="iopins" style="">
-		<table border="0" style="margin-left: auto; margin-right: auto; border-collapse:collapse; text-align: center; border-style: solid; border-width: 1px; border-color: lightgray; color: white">
+	<div id="adc_table" style="">
+		<table border="0" style="margin-left: auto; margin-right: auto; width: 300px; border-collapse:collapse; text-align: center; border-style: solid; border-width: 1px; border-color: lightgray; color: white">
 		<tr>
-			<td>ADC-Port</td><td>INTEGER</td><td>VOLTAGE</td>
+			<th>ADC-Port</th><th>INTEGER</th><th>VOLTAGE</th>
 		</tr>
 		<tr>
 			<td>0</td>
@@ -63,9 +63,6 @@
 			<td id="adc5_int"></td>
 			<td id="adc5_volt"></td>
 		</tr>
-	<br />
-	<!--button id="link" onclick="getHttpRequest()">Starte HttpRequest</button -->
-	<div id="ergebnis">Ergebnis:</div>
 </div>
 	   
 </body>

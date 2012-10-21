@@ -1,8 +1,53 @@
-td {
-	border-style: solid;
+th {
+	font-family: sans-serif;
+	border-top-style: solid;
 	border-width: 1px;
 	border-color: lightgray;
-	padding: 2px;
+	background:   darkgray;
+	padding:      2px;
+}
+
+td {
+	font-family: sans-serif;
+	border-top-style: solid;
+	border-width: 1px;
+	border-color: lightgray;
+	background:   gray;
+	padding:      2px;
+}
+
+button {
+	font-family: sans-serif;
+	font-size: medium;
+}
+
+.headline {
+	text-align: center;
+	background: gray;
+	height: 25px;
+	vertical-align: middle;
+}
+
+.headlinetext {
+	position: relative;
+	top: 5px;
+	font-family: sans-serif;
+	font-weight: bold;
+	font-size: 13px;
+
+	text-align:center;
+	vertical-align: middle;	
+	color: white;
+}
+
+.pinbutton {
+	width:  75px;
+	height: 55px;
+}
+
+.buttontext {
+	font-weight: bold;
+	color: red;
 }
 
 .roundBorder {
@@ -15,3 +60,4 @@ td {
 	-khtml-border-radius:10px; /* Konqueror */
 	border-radius:10px; /* CSS3 */
 }
+

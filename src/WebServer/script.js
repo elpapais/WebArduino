@@ -26,18 +26,16 @@ function xmlHttpObject()
 
 function http(pin, state) {
 	var xmlHttp = xmlHttpObject();
-	var ipAdress = "192.168.1.177";
 	
 	//alert("digitalWrite("+pin+","+state+")");
 	if (xmlHttp)
 	{
-		xmlHttp.open('GET', 'http://192.168.1.177/ardcmd:dw:'+pin+':'+state+';', true);
-		//xmlHttp.open('GET', 'http://192.168.2.177/?param=digitalWrite(2,1)', true);
+		xmlHttp.open('GET', 'http://'+ipAdress+'/ardcmd:dw:'+pin+':'+state+';', true);
 		xmlHttp.onreadystatechange = function ()
 		{
 			if (xmlHttp.readyState == 4) {
 				document.getElementById("ergebnis").innerHTML = "Status von Pin " +pin+" auf " + ((state==1) ? "HIGH" : "LOW") + " setzen";
-				//alert("Antwort:\n"+xmlHttp.responseText);
+				// alert("Antwort:\n"+xmlHttp.responseText);
 			}
 		};
 		
@@ -45,32 +43,60 @@ function http(pin, state) {
 	}
 }
 
+function checkPinState()
+{
+				// dout_2 bis dout_9 auslesen
+				for(var i=0; i<=7; i++)
+				{
+					var node = xmlDoc.getElementsByTagName("data")[i];
+					var value = parseInt(node.firstChild.data); // ("dout_2");
+					var adc_port = i-8;
+					
+					//alert ("value is: "+ value);
+					
+					document.getElementById("dout"+adc_port+"_int").innerHTML = value;
+					document.getElementById("adc"+adc_port+"_volt").innerHTML = Math.round(parseFloat(value)*vFactor * 100) / 100;
+				}
+	}
+
 function analogRead()
 {
 	var xmlHttp = xmlHttpObject();
-	var xmlResponse, data, root, parser, myResult;
-	var ipAdress = "192.168.1.177";
+	var data, root, parser, myResult;
+	var vFactor = 5.0 / 1023.0;
 	
 	if (xmlHttp) {
-		xmlHttp.open('GET', 'http://192.168.1.177/ardcmd:adc;', true);
+		xmlHttp.open('GET', 'http://'+ipAdress+'/ardcmd:adc;', true);
 		xmlHttp.onreadystatechange = function ()
 		{
 			if (xmlHttp.readyState == 4) {
-				xmlResponse = xmlHttp.responseXML; //Text;
-				//alert(""+xmlResponse);
-				parser=new DOMParser();
-				xmlDoc=parser.parseFromString(xmlResponse, "text/xml");
-				data = xmlResponse.getElementsByName("adc_0")[0];
-				//myResult = xmlDoc.getElementsByTagName("root")[0];//.getElementById("adc0"); //.firstChild.nodeValue;
-				//data = myResult.getElementByName("adc0"); //("data")[0].nodeValue; //.getElementById("adc0");
-				//xmlResponseTest = xmlResponse.getElementByTagName("data")[0];				//document.getElementById("ergebnis").innerHTML = "Status von Pin " +pin+" auf " + ((state==1) ? "HIGH" : "LOW") + " setzen";
-				alert(""+data); //xmlHttp.responseText);
+				var xmlResponse = xmlHttp.responseText;
+				//alert("analogRead:\n"+xmlResponse);
+				
+				xmlDoc = domParser(xmlResponse);
+				//var customerNode = xmlDoc.getElementById('dout_2');
+				//alert("test: "+customerNode);
+								
+				// ADC auslesen
+				for(var i=8; i<=13; i++)
+				{
+					var node = xmlDoc.getElementsByTagName("data")[i];
+					var value = node.firstChild.data; // ("dout_2");
+					var adc_port = i-8;
+					
+					//alert ("value is: "+ value);
+					
+					document.getElementById("adc"+adc_port+"_int").innerHTML = value;
+					document.getElementById("adc"+adc_port+"_volt").innerHTML = Math.round(parseFloat(value)*vFactor * 100) / 100;
+				}
 				
 				//document.getElementById("adc0_int").innerHTML = "test: "+xmlResponseTest;
 			}
 		};
 		xmlHttp.send(null);
 	}
+	
+	return true;
 }
 
 function allPins(state) {
@@ -98,24 +124,15 @@ function switchButton(obj)
 	var object = document.getElementById(obj);
 	var i, n, pin;
 	var splitStr = obj.split("_");
+	var prefix = splitStr[0];
+	var sufix = splitStr[1];
 	
-	if(splitStr[1] == "all")
+	if(sufix == "all")
 	{
 		n = 9;
 		i = 2;
 		
-		if(document.getElementById(splitStr[0]+"_all").innerHTML == "OFF")
-		{
-			document.getElementById(splitStr[0]+"_all").innerHTML = "ON";
-			document.getElementById(splitStr[0]+"_all").style.color = "green";
-			//document.getElementById(splitStr[0]+"_all_button").color = "green";
-		}
-		else
-		{
-			document.getElementById(splitStr[0]+"_all").innerHTML = "OFF";
-			document.getElementById(splitStr[0]+"_all").style.color = "red";
-			//document.getElementById(splitStr[0]+"_all_button").color = "red";
-		}
+		switchElementTextById(prefix, sufix); // Farbanpassung von switch-all button
 	}
 	else
 	{
@@ -123,27 +140,49 @@ function switchButton(obj)
 		i = n;	
 	}	
 	
-	// alert(obj+":"+object.innerHTML);
-	
 	for(; i<=n; i++)
 	{
-		if(document.getElementById(splitStr[0]+"_"+i).innerHTML == "OFF")
-		{
-			document.getElementById(splitStr[0]+"_"+i).innerHTML = "ON";
-			document.getElementById(splitStr[0]+"_"+i).style.color = "green";
-			//document.getElementById(splitStr[0]+"_"+i+"_button").color = "green";
-			
+		switchElementTextById(prefix, i);
+		
+		if(document.getElementById(prefix+"_"+i).innerHTML == "ON")
 			http(i, 1);
-		}
 		else
-		{
-			document.getElementById(splitStr[0]+"_"+i).innerHTML = "OFF";
-			document.getElementById(splitStr[0]+"_"+i).style.color = "red";
-			//document.getElementById(splitStr[0]+"_"+i+"_button").color = "red";
-			
 			http(i, 0);
-		}
 	}
 	
 	return true;
+}
+
+function switchElementTextById(prefix, sufix)
+{
+	if(document.getElementById(prefix+"_"+sufix).innerHTML == "OFF")
+	{
+		document.getElementById(prefix+"_"+sufix).innerHTML = "ON";
+		document.getElementById(prefix+"_"+sufix).style.color = "green";
+	}
+	else
+	{
+		document.getElementById(prefix+"_"+sufix).innerHTML = "OFF";
+		document.getElementById(prefix+"_"+sufix).style.color = "red";
+	}
+
+}
+
+function domParser(text)
+{
+	var xmlDoc;
+	
+	if (window.DOMParser)
+	{
+	  parser=new DOMParser();
+	  xmlDoc=parser.parseFromString(text, "text/xml");
+	}
+	else // Internet Explorer
+	{
+	  xmlDoc=new ActiveXObject("Microsoft.XMLDOM");
+	  xmlDoc.async=false;
+	  xmlDoc.loadXML(text);
+	}
+	
+	return xmlDoc;
 }

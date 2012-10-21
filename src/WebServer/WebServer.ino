@@ -76,22 +76,26 @@ void loop() {
           controller(scanner);
           // send a standard http response header
           client.println("HTTP/1.1 200 OK");
-          client.println("Content-Type: text/html");
+          client.println("Access-Control-Allow-Origin: *");
+          client.println("Content-Type: application/xml");
           client.println("Connnection: close");
           client.println();
           client.println("<?xml version=\"1.0\"?>");
-          client.println("<root>");
+          //client.println("<root>");
                     // add a meta refresh tag, so the browser pulls again every 5 seconds:
           // client.println("<meta http-equiv=\"refresh\" content=\"5\">");
           // output the value of each analog input pin
           
           for (int digitalChannel = 2; digitalChannel <= 9; digitalChannel++) {
             int sensorReading = digitalRead(digitalChannel);
+            client.println("</root>\n");
             client.print("\t<data name=\"dout_");
+            client.print(digitalChannel);
+            client.print("\" id=\"dout_");
             client.print(digitalChannel);
             client.print("\">");
             client.print(sensorReading);
-            client.println("</data>");       
+            client.println("</data>\n");
           }
           
           for (int analogChannel = 0; analogChannel < 6; analogChannel++) {
@@ -100,7 +104,7 @@ void loop() {
             client.print(analogChannel);
             client.print("\">");
             client.print(sensorReading);
-            client.println("</data>");       
+            client.println("</data>\n");       
           }
           client.println("</root>");
           break;
