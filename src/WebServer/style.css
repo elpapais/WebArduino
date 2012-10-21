@@ -21,6 +21,17 @@ button {
 	font-size: medium;
 }
 
+.roundBorder {
+
+	border-style: solid;
+	border-width: 1px;
+	border-color: lightgray;
+	-moz-border-radius:10px; /* Firefox */
+	-webkit-border-radius:10px; /* Safari, Chrome */
+	-khtml-border-radius:10px; /* Konqueror */
+	border-radius:10px; /* CSS3 */
+}
+
 .headline {
 	text-align: center;
 	background: gray;
@@ -40,6 +51,13 @@ button {
 	color: white;
 }
 
+/*.pinarea {
+	margin-left: auto;
+	margin-right: auto;
+	width: 90%;
+	background: lightgray;
+}*/
+
 .pinbutton {
 	width:  75px;
 	height: 55px;
@@ -48,16 +66,5 @@ button {
 .buttontext {
 	font-weight: bold;
 	color: red;
-}
-
-.roundBorder {
-
-	border-style: solid;
-	border-width: 1px;
-	border-color: lightgray;
-	-moz-border-radius:10px; /* Firefox */
-	-webkit-border-radius:10px; /* Safari, Chrome */
-	-khtml-border-radius:10px; /* Konqueror */
-	border-radius:10px; /* CSS3 */
 }
 

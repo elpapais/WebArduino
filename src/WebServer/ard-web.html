@@ -6,64 +6,69 @@
 </head>
 <body onload="analogRead()">
 
-<div id="iopins" style="width: 320px; height: 480px; border-style: solid; border-width: 1px; background: black">
+<!--div id="iopins" style="width: 320px; height: 480px; border-style: solid; border-width: 1px; background: black"-->
+<div id="iopins" style="width: 100%; height: 100%; border-style: solid; border-width: 1px; background: black">
 
 	<div class="headline">
 		<div class="headlinetext">WebArduino: Switch pins and read adc-values</div>
 	</div>
 	
 	<br/>
-	<div style="text-align: center; padding-top:5px">
-		<a onclick="switchButton('pin_2')"><button class="pinbutton" id="pin_2_button">Pin 2 <div class="buttontext" id="pin_2">OFF</div></button></a>
-		<a onclick="switchButton('pin_3')"><button class="pinbutton" id="pin_3_button">Pin 3 <div class="buttontext" id="pin_3">OFF</div></button></a>
-		<a onclick="switchButton('pin_4')"><button class="pinbutton" id="pin_4_button">Pin 4 <div class="buttontext" id="pin_4">OFF</div></button></a><br />
-		<a onclick="switchButton('pin_5')"><button class="pinbutton" id="pin_5_button">Pin 5 <div class="buttontext" id="pin_5">OFF</div></button></a>
-		<a onclick="switchButton('pin_6')"><button class="pinbutton" id="pin_6_button">Pin 6 <div class="buttontext" id="pin_6">OFF</div></button></a>
-		<a onclick="switchButton('pin_7')"><button class="pinbutton" id="pin_7_button">Pin 7 <div class="buttontext" id="pin_7">OFF</div></button></a><br />
-		<a onclick="switchButton('pin_8')"><button class="pinbutton" id="pin_8_button">Pin 8 <div class="buttontext" id="pin_8">OFF</div></button></a>
-		<a onclick="switchButton('pin_9')"><button class="pinbutton" id="pin_8_button">Pin 9 <div class="buttontext" id="pin_9">OFF</div></button></a>
-		<a onclick="switchButton('pin_all')"><button class="pinbutton" id="pin_all_button">&nbsp;ALL&nbsp;<div class="buttontext" id="pin_all">OFF</div></button></a>
+	<div id="pinarea" style="margin-left: auto; margin-right: auto; width: 90%; height: 175px; background: gray;">
+		<div style="text-align: center; padding-top:5px">
+			<a onclick="switchButton('pin_2')"><button class="pinbutton" id="pin_2_button">Pin 2 <div class="buttontext" id="pin_2">OFF</div></button></a>
+			<a onclick="switchButton('pin_3')"><button class="pinbutton" id="pin_3_button">Pin 3 <div class="buttontext" id="pin_3">OFF</div></button></a>
+			<a onclick="switchButton('pin_4')"><button class="pinbutton" id="pin_4_button">Pin 4 <div class="buttontext" id="pin_4">OFF</div></button></a><br />
+			<a onclick="switchButton('pin_5')"><button class="pinbutton" id="pin_5_button">Pin 5 <div class="buttontext" id="pin_5">OFF</div></button></a>
+			<a onclick="switchButton('pin_6')"><button class="pinbutton" id="pin_6_button">Pin 6 <div class="buttontext" id="pin_6">OFF</div></button></a>
+			<a onclick="switchButton('pin_7')"><button class="pinbutton" id="pin_7_button">Pin 7 <div class="buttontext" id="pin_7">OFF</div></button></a><br />
+			<a onclick="switchButton('pin_8')"><button class="pinbutton" id="pin_8_button">Pin 8 <div class="buttontext" id="pin_8">OFF</div></button></a>
+			<a onclick="switchButton('pin_9')"><button class="pinbutton" id="pin_8_button">Pin 9 <div class="buttontext" id="pin_9">OFF</div></button></a>
+			<a onclick="switchButton('pin_all')"><button class="pinbutton" id="pin_all_button">&nbsp;ALL&nbsp;<div class="buttontext" id="pin_all">OFF</div></button></a>
+		</div>
 	</div>
 	
 	<br/>
-	<div style="text-align: center;"><button onclick="analogRead()" style=" font-size: large">Update analog-values</button><div>
 	<br/>
-	<div id="adc_table" style="">
-		<table border="0" style="margin-left: auto; margin-right: auto; width: 300px; border-collapse:collapse; text-align: center; border-style: solid; border-width: 1px; border-color: lightgray; color: white">
-		<tr>
-			<th>ADC-Port</th><th>INTEGER</th><th>VOLTAGE</th>
-		</tr>
-		<tr>
-			<td>0</td>
-			<td id="adc0_int"></td>
-			<td id="adc0_volt"></td>
-		</tr>
-		<tr>
-			<td>1</td>
-			<td id="adc1_int"></td>
-			<td id="adc1_volt"></td>
-		</tr>
-		<tr>
-			<td>2</td>
-			<td id="adc2_int"></td>
-			<td id="adc2_volt"></td>
-		</tr>
-		<tr>
-			<td>3</td>
-			<td id="adc3_int"></td>
-			<td id="adc3_volt"></td>
-		</tr>
-		<tr>
-			<td>4</td>
-			<td id="adc4_int"></td>
-			<td id="adc4_volt"></td>
-		</tr>
-		<tr>
-			<td>5</td>
-			<td id="adc5_int"></td>
-			<td id="adc5_volt"></td>
-		</tr>
-</div>
-	   
+	<div style="margin-left: auto; margin-right: auto; width: 90%">
+		<div style="text-align: center"><button onclick="analogRead()" style="width: 100%; height: 35px; font-size: large">Update analog-values</button><div>
+		<br/>
+		<div id="adc_table" style="">
+			<table border="0" style="width: 100%; border-collapse:collapse; text-align: center; border-style: solid; border-width: 1px; border-color: lightgray; color: white">
+			<tr>
+				<th>ADC-Port</th><th>INTEGER</th><th>VOLTAGE</th>
+			</tr>
+			<tr>
+				<td>0</td>
+				<td id="adc0_int"></td>
+				<td id="adc0_volt"></td>
+			</tr>
+			<tr>
+				<td>1</td>
+				<td id="adc1_int"></td>
+				<td id="adc1_volt"></td>
+			</tr>
+			<tr>
+				<td>2</td>
+				<td id="adc2_int"></td>
+				<td id="adc2_volt"></td>
+			</tr>
+			<tr>
+				<td>3</td>
+				<td id="adc3_int"></td>
+				<td id="adc3_volt"></td>
+			</tr>
+			<tr>
+				<td>4</td>
+				<td id="adc4_int"></td>
+				<td id="adc4_volt"></td>
+			</tr>
+			<tr>
+				<td>5</td>
+				<td id="adc5_int"></td>
+				<td id="adc5_volt"></td>
+			</tr>
+		</div>
+	</div>   
 </body>
 </html>
