@@ -22,12 +22,38 @@ button {
 .roundBorder {
 
 	border-style: solid;
-	border-width: 1px;
+	border-width: 3px;
 	border-color: lightgray;
 	-moz-border-radius:10px; /* Firefox */
 	-webkit-border-radius:10px; /* Safari, Chrome */
 	-khtml-border-radius:10px; /* Konqueror */
 	border-radius:10px; /* CSS3 */
+}
+
+.roundBorderAdc {
+
+	border-style: solid;
+	border-width: 3px;
+	border-color: lightgray;
+	-moz-border-radius:10px; /* Firefox */
+	-webkit-border-radius:10px; /* Safari, Chrome */
+	-khtml-border-radius:10px; /* Konqueror */
+	border-radius:10px; /* CSS3 */
+}
+
+.roundButton {
+
+	border-style: solid;
+	border-width: 3px;
+	-moz-border-radius:10px; /* Firefox */
+	-webkit-border-radius:10px; /* Safari, Chrome */
+	-khtml-border-radius:10px; /* Konqueror */
+	border-radius:10px; /* CSS3 */
+	
+	background: #999; /* for non-css3 browsers */
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#eeeeee', endColorstr='#aaaaaa'); /* I-Explorer */
+	background: -webkit-gradient(linear, left top, left bottom, from(#eee), to(#aaa)); /* webkit browsers */
+	background: -moz-linear-gradient(top,  #eee,  #aaa); /* firefox 3.6 & higher */
 }
 
 .headline {
