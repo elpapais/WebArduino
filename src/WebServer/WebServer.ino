@@ -1,21 +1,37 @@
 /*
-  WebArduino
+  WebArduino: Ein Projekt der Werner-von-Siemens-Schule Koelnue
  
- A simple web server to set or reset the arduino-ports 2-9
- and to watch the adc-ports.
- using an Arduino Wiznet Ethernet shield. 
+  Per Webserver werden HTTP-Request ausgewertet, um die Zustaende
+  von Ausgang-Bits zu setzen und die Werte des AD-Wandlers
+  auszulesen.
+  Die Hardware baut auf dem Arduino (mit ATmega328) mit
+  Ethernet-Shield auf. 
  
- Circuit:
- * Ethernet shield attached to pins 10, 11, 12, 13
- * Analog inputs attached to pins A0 through A5 (optional)
+ Anschluesse:
+ * Das Ethernet-Shield belegt die Pins 10, 11, 12 und 13
+ * Pin 0 und 1 sind fuer UART reserviert
+ * Die Analogeingaenge belegen pins A0 bis A5 (optional)
  
- based on the webserver-example from the arduino-gui
+ Das Programm basiert auf dem Webserver-Beispiel der Arduino-Oberflaeche
  
- Codes by K. Blauel
- Last modified 19 Oct. 2012
+ (c) 2012 by K. Blauel
+ Letzte Aenderung: 26 Okt. 2012
  
- Licence: GPL 3.0 or later
- 
+ Lizenz: GPL 3.0 oder hoeher.
+ Dieses Programm ist freie Software. Sie koennen es unter den Bedingungen
+ der GNU General Public License, wie von der Free Software Foundation
+ veroeffentlicht, weitergeben und/oder modifizieren, entweder gemaeß
+ Version 3 der Lizenz oder (nach Ihrer Option) jeder spaeteren Version.
+
+ Die Veroeffentlichung dieses Programms erfolgt in der Hoffnung,
+ daß es Ihnen von Nutzen sein wird, aber OHNE IRGENDEINE GARANTIE,
+ sogar ohne die implizite Garantie der MARKTREIFE oder der VERWENDBARKEIT
+ FUER EINEN BESTIMMTEN ZWECK. Details finden Sie in der GNU General Public License.
+
+ Sie sollten ein Exemplar der GNU General Public License zusammen mit diesem
+ Programm erhalten haben. Falls nicht, siehe:
+ http://www.gnu.org/licenses/ (Englisch)
+ http://www.gnu.de/documents/gpl.de.html (Deutsch)
  */
 
 #include <SPI.h>
@@ -32,7 +48,7 @@ IPAddress ip(192,168,1, 177);
 // (port 80 is default for HTTP):
 EthernetServer server(80);
 
-String scanner = "***\n";      // stores the first 1000 bytes of the client-request
+String scanner = "";  // This buffer-string keeps the http-request from the webclient      // scanner = "***\n"; 
 
 void setup() {
   
@@ -40,7 +56,7 @@ void setup() {
     pinMode(i, OUTPUT);
     
  // Open serial communications and wait for port to open:
-  Serial.begin(38400); //! Chance it if you need
+  Serial.begin(38400); // !! Change it if you need !!
    while (!Serial) {
     ; // wait for serial port to connect. Needed for Leonardo only
   }
@@ -66,12 +82,11 @@ void loop() {
         char c = client.read();
         
         scanner += c;
-        
-        //Serial.write(c);
+
         // if you've gotten to the end of the line (received a newline character) and the line is blank, the http request has ended, so you can send a reply
         if (c == '\n' && currentLineIsBlank) {
           
-          scanner += "***";
+          scanner += "";  //  scanner += "***";
           
           controller(scanner);
           // send a standard http response header
@@ -80,15 +95,15 @@ void loop() {
           client.println("Content-Type: application/xml");
           client.println("Connnection: close");
           client.println();
-          client.println("<?xml version=\"1.0\"?>");
-          //client.println("<root>");
-                    // add a meta refresh tag, so the browser pulls again every 5 seconds:
+          client.println("<?xml version=\"1.0\"?>");  // here starts the definition for xml-output-string
+          client.println("<root>");  // this is the root-node
+          // add a meta refresh tag, so the browser pulls again every 5 seconds:
           // client.println("<meta http-equiv=\"refresh\" content=\"5\">");
           // output the value of each analog input pin
           
+          // this loop writes the state of the digital-outputs to the xml-output-String
           for (int digitalChannel = 2; digitalChannel <= 9; digitalChannel++) {
             int sensorReading = digitalRead(digitalChannel);
-            client.println("</root>\n");
             client.print("\t<data name=\"dout_");
             client.print(digitalChannel);
             client.print("\" id=\"dout_");
@@ -98,6 +113,7 @@ void loop() {
             client.println("</data>\n");
           }
           
+          // this loop writes the state of the adc-values to the xml-output-String
           for (int analogChannel = 0; analogChannel < 6; analogChannel++) {
             int sensorReading = analogRead(analogChannel);
             client.print("\t<data name=\"adc_");
@@ -106,7 +122,7 @@ void loop() {
             client.print(sensorReading);
             client.println("</data>\n");       
           }
-          client.println("</root>");
+          client.println("</root>");  // end of the root-node
           break;
         }
         if (c == '\n') {
@@ -128,27 +144,29 @@ void loop() {
     //Serial.print("\n"); 
     Serial.print("\nclient disconnected\n");
      
-    
-    scanner = "";
+    scanner = "";  // clear the buffer-String
   }
 }
 
+/* The controller. Main job is to handle the digitalWrite
+   and analogRead commands from the webclient
+*/
 void controller(String string)
 {
-  
-  if(string.indexOf("ardcmd:dw:") >= 0)
+  if(string.indexOf("ardcmd:dw:") >= 0)  // test, if client calls a digitalWrite-command
   {
-    String search = "ardcmd:dw:";
-    int startsAt = string.indexOf(search);
-    int endsAt = string.indexOf(";", startsAt+1);
-    int pin, pinState;
+    String search = "ardcmd:dw:";                 // the search-expression
+    int startsAt = string.indexOf(search);        // looking for the start-position of the search-expression
+    int endsAt = string.indexOf(";", startsAt+1); // looking for the end-position of the command
+    int pin, pinState;                            // holds the pin-number and the pin-state
     char part[10];
     String part1, part2;
     
-    part1 = string.substring(startsAt+search.length(), startsAt+search.length()+1);
-    part2 = string.substring(startsAt+search.length()+2, endsAt);
+    part1 = string.substring(startsAt+search.length(), startsAt+search.length()+1); // return the first value as string
+    part2 = string.substring(startsAt+search.length()+2, endsAt);                   // return the second value as string
     
-    /*Serial.print("\nardcmd:dw: vorhanden\n");
+    /*
+    Serial.print("\nardcmd:dw: vorhanden\n");
     
     Serial.print(startsAt); Serial.print("\n"); Serial.print(endsAt);
     
@@ -156,20 +174,22 @@ void controller(String string)
     
     Serial.print("\n2. Wert:"); Serial.print(part2); Serial.print(":2. Wert\n");
     */
+    
      // match the selected pin
      part1.toCharArray(part,10);
      pin = atoi(part);
       
-      // match the selected pinState
+     // match the selected pinState
      part2.toCharArray(part,10);
      pinState = atoi(part);
      
      //pin = values[0];
      //pinState = values[1];
      
-     digitalWrite(pin, pinState);
+     digitalWrite(pin, pinState);  // set the selected pin-states
   }
   
+  // special functions for adc-values are still in brainstorming
   if(string.indexOf("ardcmd:adc:") >= 0)
   {
     

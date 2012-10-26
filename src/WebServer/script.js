@@ -43,7 +43,7 @@ function pinState(pin, state) {
 	}
 }
 
-// Pinstatus ueberpruefen und an buttons uebergeben
+// Pinstatus ueberpruefen und an Buttons uebergeben
 function checkPinState()
 {
 	var xmlHttp = xmlHttpObject();
@@ -73,7 +73,7 @@ function checkPinState()
 	return true;
 }
 
-// Analogeingaenge auslesen
+// Analogeingaenge auslesen und in Tabelle aktualisieren
 function analogRead()
 {
 	var xmlHttp = xmlHttpObject();
@@ -107,7 +107,7 @@ function analogRead()
 	return true;
 }
 
-// Alle Pins schalten
+// Alle Pins bitweise umschalten
 function allPins(state) {
 
 	for(var i=2; i<=9; i++)
@@ -162,7 +162,7 @@ function switchButton(obj)
 	return true;
 }
 
-// Taster-Status setzen
+// Taster-Status umswitchen
 function switchElementTextById(prefix, sufix)
 {
 	if(document.getElementById(prefix+"_"+sufix).innerHTML == "OFF")
@@ -177,7 +177,7 @@ function switchElementTextById(prefix, sufix)
 	}
 }
 
-// Taster-Status setzen
+// Taster-Status mit 'by value' setzen
 function switchElementTextByIdAndState(prefix, sufix, state)
 {
 	if(state==1)

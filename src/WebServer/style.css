@@ -45,6 +45,7 @@ button {
 
 	border-style: solid;
 	border-width: 3px;
+	border-color: lightgray;
 	-moz-border-radius:10px; /* Firefox */
 	-webkit-border-radius:10px; /* Safari, Chrome */
 	-khtml-border-radius:10px; /* Konqueror */
